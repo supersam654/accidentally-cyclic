@@ -15,3 +15,11 @@ This will be revamped when I push this as an `npm` package.
     node index.js ../path/to/the/index/of/your/project
 
 Then open `www/index.html` in your web browser.
+
+## TODO
+
+- [] Publish as an npm module.
+- [] Make the CLI portion work.
+- [] Make the frontend a bit less sketchy.
+- [] Add screenshots.
+- [] Add some test cases.
