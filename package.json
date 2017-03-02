@@ -1,0 +1,15 @@
+{
+  "name": "accidentally-cyclic",
+  "version": "1.0.0",
+  "description": "A tool for finding cyclic dependencies within an Node.js project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sam Marder",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "standard": "^9.0.0"
+  }
+}
