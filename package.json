@@ -5,8 +5,8 @@
   "main": "dagger.js",
   "bin": "./cmd.js",
   "scripts": {
-    "lint": "node_modules/standard/bin/cmd.js",
-    "test": "npm lint"
+    "lint": "node node_modules/standard/bin/cmd.js",
+    "test": "npm run lint"
   },
   "repository": {
     "type": "git",
