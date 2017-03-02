@@ -1,10 +1,15 @@
 {
-  "name": "accidentally-cyclic",
-  "version": "1.0.0",
+  "name": "dagger",
+  "version": "0.0.1",
   "description": "A tool for finding cyclic dependencies within an Node.js project.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "node_modules/standard/bin/cmd.js",
+    "test": "npm lint"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/supersam654/DAGger.git"
   },
   "author": "Sam Marder",
   "license": "MIT",
