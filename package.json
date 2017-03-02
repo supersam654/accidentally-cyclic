@@ -8,12 +8,14 @@
     "test": "npm lint"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/supersam654/DAGger.git"
+    "type": "git",
+    "url": "https://github.com/supersam654/DAGger.git"
   },
   "author": "Sam Marder",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "argparse": "^1.0.9"
+  },
   "devDependencies": {
     "standard": "^9.0.0"
   }

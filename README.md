@@ -5,6 +5,7 @@ A CLI tool for creating internal dependency graphs of Node.js projects.
 ## Requirements
 
 * Node.js with ES6 support (tested with Node 6)
+* A modern web browser (tested with Firefox and Chrome)
 
 ## Quick Start
 

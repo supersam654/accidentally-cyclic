@@ -40,7 +40,7 @@ function hijackLoad (basePath, visitor) {
   }
 }
 
-exports.spy = function (entryPoint, hideNodeModules) {
+exports.spy = function (entryPoint, hideNodeModules, supressStdout) {
   let dependencies = []
 
   const basePath = path.dirname(entryPoint)
@@ -63,7 +63,6 @@ exports.spy = function (entryPoint, hideNodeModules) {
     }
 
     try {
-      console.warn(path.resolve(path.dirname(entryPoint)))
       process.chdir(path.resolve(path.dirname(entryPoint)))
       require(entryPoint)
     } catch (e) {

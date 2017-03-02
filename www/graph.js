@@ -75,6 +75,3 @@ setTimeout(() => {
     network.fit()
   }, 1000)
 }, 1000)
-
-
-// network.fit()
