@@ -1,11 +1,10 @@
+#!/usr/bin/env node
 const fs = require('fs')
 const path = require('path')
 
 const ArgumentParser = require('argparse').ArgumentParser
 
-const spy = require('./spy')
-
-const ENTRY = './sample/entry'
+const dagger = require('../dagger')
 
 // I refuse to import a whole package for this.
 function sprintf (format) {
@@ -17,7 +16,7 @@ function sprintf (format) {
 
 function parseArguments () {
   const parser = new ArgumentParser({
-    version: require('./package.json').version,
+    version: require('../package.json').version,
     addHelp: true,
     description: 'Create internal dependency graph of Node.js project.'
   })
@@ -50,11 +49,10 @@ function parseArguments () {
   return parser.parseArgs()
 }
 
-function main () {
-  const args = parseArguments()
-  console.log(args)
+function main (args) {
+  const mainFile = path.resolve(process.cwd(), args.mainFile)
 
-  spy.spy(ENTRY, !args.all, args.quiet)
+  dagger.spy(mainFile, !args.all, args.quiet)
   .then(dependencies => {
     for (let dep of dependencies) {
       // Shorten names even more for graph representation.
@@ -76,8 +74,9 @@ function main () {
       fs.writeFileSync(args.html, htmlData)
     }
   })
-  .catch (e => {
+  .catch(e => {
     console.warn(e)
   })
 }
-main()
+
+main(parseArguments())

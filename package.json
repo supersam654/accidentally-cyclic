@@ -1,8 +1,9 @@
 {
   "name": "dagger",
   "version": "0.0.1",
-  "description": "A tool for finding cyclic dependencies within an Node.js project.",
-  "main": "index.js",
+  "description": "A CLI tool for finding cyclic dependencies within an Node.js project.",
+  "main": "dagger.js",
+  "bin": "./cmd.js",
   "scripts": {
     "lint": "node_modules/standard/bin/cmd.js",
     "test": "npm lint"
@@ -18,5 +19,15 @@
   },
   "devDependencies": {
     "standard": "^9.0.0"
-  }
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "keywords": [
+    "dagger",
+    "dependency",
+    "module",
+    "visjs",
+    "cli"
+  ]
 }
