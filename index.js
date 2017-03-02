@@ -7,6 +7,14 @@ const spy = require('./spy')
 
 const ENTRY = './sample/entry'
 
+// I refuse to import a whole package for this.
+function sprintf (format) {
+  var args = Array.prototype.slice.call(arguments, 1)
+  return format.replace(/{(\d+)}/g, function (match, number) {
+    return typeof args[number] !== 'undefined' ? args[number] : match
+  })
+}
+
 function parseArguments () {
   const parser = new ArgumentParser({
     version: require('./package.json').version,
@@ -15,16 +23,15 @@ function parseArguments () {
   })
 
   parser.addArgument(
-    ['-j', '--json'],
+    ['--json'],
     {
       help: 'Output dependencies directly as a JSON array to a file'
     }
   )
   parser.addArgument(
-    ['-q', '--quiet'],
+    ['--html'],
     {
-      action: 'storeTrue',
-      help: 'Silence standard out of the required file'
+      help: 'Output dependency graph to a self-contained HTML file'
     }
   )
   parser.addArgument(
@@ -44,7 +51,6 @@ function parseArguments () {
 }
 
 function main () {
-  const HEADER = 'const dependencies = '
   const args = parseArguments()
   console.log(args)
 
@@ -58,11 +64,20 @@ function main () {
     }
 
     const jsonData = JSON.stringify(dependencies, null, 2)
+
+    // Note that you can export as json and html if you so please.
     if (args.json) {
       fs.writeFileSync(args.json, jsonData)
-    } else {
-      fs.writeFileSync('./www/data.js', HEADER + jsonData)
     }
+    if (args.html) {
+      const htmlTemplate = fs.readFileSync('./html_template/index.tmpl.html').toString()
+      const frontendJS = fs.readFileSync('./html_template/script.js').toString()
+      const htmlData = sprintf(htmlTemplate, jsonData, frontendJS)
+      fs.writeFileSync(args.html, htmlData)
+    }
+  })
+  .catch (e => {
+    console.warn(e)
   })
 }
 main()

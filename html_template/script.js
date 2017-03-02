@@ -60,18 +60,4 @@ const options = {
 }
 
 const network = new vis.Network(container, data, options)
-const patientId = labelMaps['patient']
-network.setSelection({nodes: [patientId]})
-const patientPosition = network.getPositions([patientId])[patientId]
-setTimeout(() => {
-  network.moveTo({
-    position: patientPosition,
-    scale: 2,
-    offset: {x: 0, y: 0},
-    animation: false
-    // offset: {x: window.innerWidth / 2, y: window.innerHeight / 2}
-  })
-  setTimeout(() => {
-    network.fit()
-  }, 1000)
-}, 1000)
+network.fit()
