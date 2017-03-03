@@ -1,7 +1,7 @@
 {
   "name": "accidentally-cyclic",
   "version": "1.0.0",
-  "description": "A CLI tool for finding cyclic dependencies within an Node.js project.",
+  "description": "A CLI tool for finding cyclic dependencies within a Node.js project.",
   "main": "cyclic.js",
   "bin": {
     "cyclic": "bin/cli.js"
