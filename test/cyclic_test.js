@@ -5,15 +5,15 @@ const chai = require('chai')
 const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
-const dagger = require('../dagger')
+const cyclic = require('../cyclic')
 
-describe('dagger.js#require', function () {
+describe('cyclic.js#require', function () {
   it('Handles the basic project', function (done) {
     const expectedResult = [{
       parent: 'a.js',
       module: 'b.js'
     }]
-    expect(dagger.require('./samples/basic/a'))
+    expect(cyclic.require('./samples/basic/a'))
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })
@@ -29,7 +29,7 @@ describe('dagger.js#require', function () {
       parent: 'a.js',
       module: 'b.js'
     }]
-    expect(dagger.require('./samples/cyclic/a'))
+    expect(cyclic.require('./samples/cyclic/a'))
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })
@@ -42,7 +42,7 @@ describe('dagger.js#require', function () {
       parent: 'a.js',
       module: 'nested/b.js'
     }]
-    expect(dagger.require('./samples/nested/a'))
+    expect(cyclic.require('./samples/nested/a'))
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })
@@ -52,7 +52,7 @@ describe('dagger.js#require', function () {
       parent: 'a.js',
       module: 'nested/b.js'
     }]
-    expect(dagger.require('./samples/fs_read/a'))
+    expect(cyclic.require('./samples/fs_read/a'))
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })
@@ -62,7 +62,7 @@ describe('dagger.js#require', function () {
       parent: 'a.js',
       module: 'b.js'
     }]
-    expect(dagger.require('./samples/third_party/a'))
+    expect(cyclic.require('./samples/third_party/a'))
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })
@@ -76,13 +76,13 @@ describe('dagger.js#require', function () {
       module: 'c.js'
     }]
     const absolutePath = path.resolve('test/samples/absolute/a')
-    expect(dagger.require(absolutePath))
+    expect(cyclic.require(absolutePath))
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })
 
   it('Automatically enables verbose output for third-party modules', function (done) {
-    dagger.require('chai')
+    cyclic.require('chai')
     .then(dependencies => {
       expect(dependencies.length).to.be.above(0)
       done()

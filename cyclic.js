@@ -1,7 +1,6 @@
 'use strict'
 
 // This file lets you record all `requires` that stem from one `require`.
-// e.g. To see what `require('./server.js')` would actually require, call `spy('./server.js')`
 
 // `let`, not `const` because we're mutating it.
 let Module = require('module')

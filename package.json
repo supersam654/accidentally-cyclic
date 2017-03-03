@@ -1,9 +1,11 @@
 {
-  "name": "dagger",
+  "name": "accidentally-cyclic",
   "version": "1.0.0",
   "description": "A CLI tool for finding cyclic dependencies within an Node.js project.",
-  "main": "dagger.js",
-  "bin": "./cli.js",
+  "main": "cyclic.js",
+  "bin": {
+    "cyclic": "bin/cli.js"
+  },
   "scripts": {
     "lint": "node node_modules/standard/bin/cmd.js",
     "mocha": "node node_modules/mocha/bin/mocha",
@@ -11,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/supersam654/DAGger.git"
+    "url": "https://github.com/supersam654/accidentally-cyclic.git"
   },
   "author": "Sam Marder",
   "license": "MIT",
@@ -28,7 +30,8 @@
     "node": ">=6"
   },
   "keywords": [
-    "dagger",
+    "cyclic",
+    "circular",
     "dependency",
     "module",
     "visjs",

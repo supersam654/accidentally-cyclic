@@ -6,7 +6,7 @@ const path = require('path')
 
 const ArgumentParser = require('argparse').ArgumentParser
 
-const dagger = require('../dagger')
+const cyclic = require('../cyclic')
 
 // I refuse to import a whole package for this.
 function sprintf (format) {
@@ -58,7 +58,7 @@ function main (args) {
   }
   // TODO: Revert chdir change if this ever gets used outside of a CLI.
   process.chdir(path.dirname(mainFile))
-  dagger.require(mainFile, args.all)
+  cyclic.require(mainFile, args.all)
   .then(dependencies => {
     for (let dep of dependencies) {
       // Shorten names even more for graph representation.
