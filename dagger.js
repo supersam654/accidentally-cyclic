@@ -27,7 +27,6 @@ function hijackLoad (visitor) {
     const exports = originalLoad.apply(Module, arguments)
     const parentFullPath = parent.filename
     const moduleFullPath = Module._resolveFilename(request, parent)
-
     visitor(parentFullPath, moduleFullPath)
     return exports
   }
@@ -70,10 +69,10 @@ exports.require = function (entryPoint, showNodeModules) {
   const basePath = path.dirname(path.resolve(getCallerDirectory(), entryPoint))
 
   hijackLoad(function visitor (parentPath, modulePath) {
+    toBePurged.add(modulePath)
     if (!showNodeModules && looksLikeThirdParty(parentPath, modulePath)) {
       return
     }
-    toBePurged.add(modulePath)
 
     const parentRelativePath = path.relative(basePath, parentPath)
     const moduleRelativePath = path.relative(basePath, modulePath)

@@ -80,4 +80,13 @@ describe('dagger.js#require', function () {
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })
+
+  it('Automatically enables verbose output for third-party modules', function (done) {
+    dagger.require('chai')
+    .then(dependencies => {
+      expect(dependencies.length).to.be.above(0)
+      done()
+    })
+    .catch(done)
+  })
 })
