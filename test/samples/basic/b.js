@@ -1,1 +1,1 @@
-console.log('requiring basic/b')
+// This file intentionally left empty.

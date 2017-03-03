@@ -34,13 +34,23 @@ describe('dagger.js#require', function () {
 
   it('Properly handles the nested project', function (done) {
     const expectedResult = [{
-      module: 'c.js',
-      parent: 'nested/b.js'
+      parent: 'nested/b.js',
+      module: 'c.js'
     }, {
-      module: 'nested/b.js',
-      parent: 'a.js'
+      parent: 'a.js',
+      module: 'nested/b.js'
     }]
     expect(dagger.require('samples/nested/a'))
+    .to.eventually.deep.equal(expectedResult)
+    .notify(done)
+  })
+
+  it('Properly handles relative `fs.read` calls', function (done) {
+    const expectedResult = [{
+      parent: 'a.js',
+      module: 'nested/b.js'
+    }]
+    expect(dagger.require('samples/fs_read/a'))
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })

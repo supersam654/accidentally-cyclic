@@ -10,7 +10,6 @@ const path = require('path')
 // Some things we'll restore later.
 const originalLoad = Module._load
 const originalExit = process.exit
-const originalCwd = path.resolve(process.cwd())
 
 /**
  * Detect if an import looks like it's from another node module.
@@ -24,6 +23,7 @@ function looksLikeThirdParty (parentRelativePath, moduleRelativePath) {
 }
 
 function hijackLoad (basePath, visitor) {
+  basePath = path.resolve(basePath)
   Module._load = function (request, parent, isMain) {
     const exports = originalLoad.apply(Module, arguments)
     const parentFullPath = parent.filename
@@ -59,13 +59,13 @@ function getCallerDirectory () {
   return path.dirname(callerFile)
 }
 
-exports.require = function (entryPoint, hideNodeModules) {
+exports.require = function (entryPoint, showNodeModules) {
   let dependencies = []
 
-  const basePath = path.dirname(entryPoint)
+  const basePath = path.dirname(path.resolve(getCallerDirectory(), entryPoint))
 
   hijackLoad(basePath, function visitor (parentPath, modulePath) {
-    if (!hideNodeModules || !looksLikeThirdParty(parentPath, modulePath)) {
+    if (showNodeModules || !looksLikeThirdParty(parentPath, modulePath)) {
       // Make all paths, even on Windows, use forward slashes.
       dependencies.push({
         parent: parentPath.split(path.sep).join('/'),
@@ -82,13 +82,11 @@ exports.require = function (entryPoint, hideNodeModules) {
     }
 
     try {
-      process.chdir(getCallerDirectory())
-      require(path.resolve(entryPoint))
+      require(path.resolve(getCallerDirectory(), entryPoint))
     } finally {
       // Undo the damage no matter what happens.
       Module._load = originalLoad
       process.exit = originalExit
-      process.chdir(originalCwd)
     }
 
     // Get rid of the last known dependency because that is this file requiring the entry point.
