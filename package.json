@@ -4,7 +4,7 @@
   "description": "A CLI tool for finding cyclic dependencies within a Node.js project.",
   "main": "cyclic.js",
   "bin": {
-    "cyclic": "bin/cli.js"
+    "cyclic": "bin/cyclic"
   },
   "scripts": {
     "lint": "node node_modules/standard/bin/cmd.js",
