@@ -6,13 +6,13 @@ chai.use(require('chai-as-promised'))
 const dagger = require('../dagger')
 
 describe('dagger.js', function () {
-  describe('#spy', function () {
+  describe('#require', function () {
     it('Properly handles the basic project', function (done) {
       const expectedResult = [{
         parent: 'a.js',
         module: 'b.js'
       }]
-      expect(dagger.spy('samples/basic/a'))
+      expect(dagger.require('samples/basic/a'))
       .to.eventually.deep.equal(expectedResult)
       .notify(done)
     })
@@ -29,7 +29,7 @@ describe('dagger.js', function () {
       parent: 'a.js',
       module: 'b.js'
     }]
-    expect(dagger.spy('samples/cyclic/a'))
+    expect(dagger.require('samples/cyclic/a'))
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })
@@ -42,7 +42,7 @@ describe('dagger.js', function () {
       module: 'nested/b.js',
       parent: 'a.js'
     }]
-    expect(dagger.spy('samples/nested/a'))
+    expect(dagger.require('samples/nested/a'))
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })

@@ -1,6 +1,6 @@
 {
   "name": "dagger",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A CLI tool for finding cyclic dependencies within an Node.js project.",
   "main": "dagger.js",
   "bin": "./cmd.js",

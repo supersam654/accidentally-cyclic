@@ -26,14 +26,13 @@ function looksLikeThirdParty (parentRelativePath, moduleRelativePath) {
 function hijackLoad (basePath, visitor) {
   Module._load = function (request, parent, isMain) {
     const exports = originalLoad.apply(Module, arguments)
-    delete require.cache[request]
-
     const parentFullPath = parent.filename
     const moduleFullPath = Module._resolveFilename(request, parent)
 
     const parentRelativePath = path.relative(basePath, parentFullPath)
     const moduleRelativePath = path.relative(basePath, moduleFullPath)
 
+    delete require.cache[moduleFullPath]
     visitor(parentRelativePath, moduleRelativePath)
 
     return exports
@@ -60,7 +59,7 @@ function getCallerDirectory () {
   return path.dirname(callerFile)
 }
 
-exports.spy = function (entryPoint, hideNodeModules) {
+exports.require = function (entryPoint, hideNodeModules) {
   let dependencies = []
 
   const basePath = path.dirname(entryPoint)
