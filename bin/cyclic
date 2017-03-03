@@ -71,9 +71,9 @@ function main (args) {
   .then(dependencies => {
     for (let dep of dependencies) {
       // Shorten names even more for graph representation.
-      dep.module = path.basename(dep.module)
-      dep.parent = path.basename(dep.parent)
-      console.log(dep)
+      // dep.module = path.basename(dep.module)
+      // dep.parent = path.basename(dep.parent)
+      console.log(`${dep.parent} -> ${dep.module}`)
     }
 
     const jsonData = JSON.stringify(dependencies, null, 2)
