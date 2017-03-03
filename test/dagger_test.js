@@ -54,4 +54,14 @@ describe('dagger.js#require', function () {
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })
+
+  it('Properly handles external packages', function (done) {
+    const expectedResult = [{
+      parent: 'a.js',
+      module: 'b.js'
+    }]
+    expect(dagger.require('./samples/third_party/a'))
+    .to.eventually.deep.equal(expectedResult)
+    .notify(done)
+  })
 })

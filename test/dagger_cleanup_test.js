@@ -5,7 +5,7 @@ const expect = require('chai').expect
 
 const dagger = require('../dagger')
 
-describe('dagger.js#require', function () {
+describe('dagger.js#require cleanup', function () {
   it('Restores `require` after the promise resolves.', function (done) {
     const originalRequire = require
     const originalLoad = Module._load

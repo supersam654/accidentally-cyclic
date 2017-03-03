@@ -54,6 +54,8 @@ function parseArguments () {
 function main (args) {
   const mainFile = path.resolve(process.cwd(), args.mainFile)
 
+  // TODO: Revert chdir change if this ever gets used outside of a CLI.
+  process.chdir(path.dirname(mainFile))
   dagger.require(mainFile, args.all)
   .then(dependencies => {
     for (let dep of dependencies) {

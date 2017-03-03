@@ -18,23 +18,17 @@ const originalExit = process.exit
  */
 function looksLikeThirdParty (parentRelativePath, moduleRelativePath) {
   return !moduleRelativePath.endsWith('.js') ||
-      moduleRelativePath.startsWith('node_modules') ||
-      parentRelativePath.startsWith('node_modules')
+      moduleRelativePath.includes('node_modules') ||
+      parentRelativePath.includes('node_modules')
 }
 
-function hijackLoad (basePath, visitor) {
-  basePath = path.resolve(basePath)
+function hijackLoad (visitor) {
   Module._load = function (request, parent, isMain) {
     const exports = originalLoad.apply(Module, arguments)
     const parentFullPath = parent.filename
     const moduleFullPath = Module._resolveFilename(request, parent)
 
-    const parentRelativePath = path.relative(basePath, parentFullPath)
-    const moduleRelativePath = path.relative(basePath, moduleFullPath)
-
-    delete require.cache[moduleFullPath]
-    visitor(parentRelativePath, moduleRelativePath)
-
+    visitor(parentFullPath, moduleFullPath)
     return exports
   }
 }
@@ -64,14 +58,22 @@ exports.require = function (entryPoint, showNodeModules) {
 
   const basePath = path.dirname(path.resolve(getCallerDirectory(), entryPoint))
 
-  hijackLoad(basePath, function visitor (parentPath, modulePath) {
-    if (showNodeModules || !looksLikeThirdParty(parentPath, modulePath)) {
-      // Make all paths, even on Windows, use forward slashes.
-      dependencies.push({
-        parent: parentPath.split(path.sep).join('/'),
-        module: modulePath.split(path.sep).join('/')
-      })
+  let toBePurged = new Set()
+
+  hijackLoad(function visitor (parentPath, modulePath) {
+    if (!showNodeModules && looksLikeThirdParty(parentPath, modulePath)) {
+      return
     }
+    toBePurged.add(modulePath)
+
+    const parentRelativePath = path.relative(basePath, parentPath)
+    const moduleRelativePath = path.relative(basePath, modulePath)
+
+    // Make all paths, even on Windows, use forward slashes.
+    dependencies.push({
+      parent: parentRelativePath.split(path.sep).join('/'),
+      module: moduleRelativePath.split(path.sep).join('/')
+    })
   })
 
   return new Promise(function (resolve, reject) {
@@ -87,6 +89,10 @@ exports.require = function (entryPoint, showNodeModules) {
       // Undo the damage no matter what happens.
       Module._load = originalLoad
       process.exit = originalExit
+
+      for (let cachedFile of toBePurged) {
+        delete require.cache[cachedFile]
+      }
     }
 
     // Get rid of the last known dependency because that is this file requiring the entry point.
