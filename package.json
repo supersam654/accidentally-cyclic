@@ -18,7 +18,8 @@
   "author": "Sam Marder",
   "license": "MIT",
   "dependencies": {
-    "argparse": "^1.0.9"
+    "argparse": "^1.0.9",
+    "cytoscape": "^2.7.15"
   },
   "devDependencies": {
     "chai": "^3.5.0",

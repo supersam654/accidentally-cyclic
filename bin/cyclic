@@ -7,14 +7,7 @@ const path = require('path')
 const ArgumentParser = require('argparse').ArgumentParser
 
 const cyclic = require('../cyclic')
-
-// I refuse to import a whole package for this.
-function sprintf (format) {
-  var args = Array.prototype.slice.call(arguments, 1)
-  return format.replace(/{(\d+)}/g, function (match, number) {
-    return typeof args[number] !== 'undefined' ? args[number] : match
-  })
-}
+const htmlGenerator = require('../lib/html_generator')
 
 function parseArguments () {
   const parser = new ArgumentParser({
@@ -76,20 +69,20 @@ function main (args) {
     // This must be a core module or third-party module so don't do anything.
   }
   // TODO: Revert chdir change if this ever gets used outside of a CLI.
+  const originalCwd = process.cwd()
   process.chdir(path.dirname(mainFile))
   cyclic.require(mainFile, args.all)
   .then(dependencies => {
-    const jsonData = JSON.stringify(dependencies, null, 2)
+    process.chdir(originalCwd)
 
     // Note that you can export as multiple formats if you so please.
     if (args.json) {
+      const jsonData = JSON.stringify(dependencies, null, 2)
       fs.writeFileSync(args.json, jsonData)
     }
     if (args.html) {
-      const htmlTemplate = fs.readFileSync('./html_template/index.tmpl.html').toString()
-      const frontendJS = fs.readFileSync('./html_template/script.js').toString()
-      const htmlData = sprintf(htmlTemplate, jsonData, frontendJS)
-      fs.writeFileSync(args.html, htmlData)
+      const htmlOutput = htmlGenerator.generate(dependencies)
+      fs.writeFileSync(args.html, htmlOutput)
     }
     if (args.text) {
       for (let dependency of dependencies) {
@@ -98,6 +91,7 @@ function main (args) {
     }
   })
   .catch(e => {
+    process.chdir(originalCwd)
     console.warn(e)
   })
 }
