@@ -52,8 +52,10 @@ function parseArguments () {
 }
 
 function main (args) {
-  const mainFile = path.resolve(process.cwd(), args.mainFile)
-
+  let mainFile = args.mainFile
+  if (args.mainFile.startsWith('.')) {
+    mainFile = path.resolve(process.cwd(), mainFile)
+  }
   // TODO: Revert chdir change if this ever gets used outside of a CLI.
   process.chdir(path.dirname(mainFile))
   dagger.require(mainFile, args.all)

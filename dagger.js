@@ -54,11 +54,20 @@ function getCallerDirectory () {
 }
 
 exports.require = function (entryPoint, showNodeModules) {
-  let dependencies = []
-
-  const basePath = path.dirname(path.resolve(getCallerDirectory(), entryPoint))
+  // Fix relative paths
+  // Don't touch absolute paths, core modules, and node_modules.
+  if (entryPoint.startsWith('.')) {
+    entryPoint = path.resolve(getCallerDirectory(), entryPoint)
+  } else if (!path.isAbsolute(entryPoint)) {
+    // It's not an absolute path either so it's a 3rd-party module.
+    // All imports will be discarded unless this is true because everything will be in a node_modules folder.
+    showNodeModules = true
+  }
 
   let toBePurged = new Set()
+  let dependencies = []
+  // const basePath = Module._resolveFilename(entryPoint, process.cwd())
+  const basePath = path.dirname(path.resolve(getCallerDirectory(), entryPoint))
 
   hijackLoad(function visitor (parentPath, modulePath) {
     if (!showNodeModules && looksLikeThirdParty(parentPath, modulePath)) {
@@ -84,12 +93,14 @@ exports.require = function (entryPoint, showNodeModules) {
     }
 
     try {
-      require(path.resolve(getCallerDirectory(), entryPoint))
+      require(entryPoint)
     } finally {
       // Undo the damage no matter what happens.
       Module._load = originalLoad
       process.exit = originalExit
 
+      // Clear files we required from cache to make this method more idempotent.
+      // Then calling `dagger.require('./a')` twice will yield the same result twice.
       for (let cachedFile of toBePurged) {
         delete require.cache[cachedFile]
       }

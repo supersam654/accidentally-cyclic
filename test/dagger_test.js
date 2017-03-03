@@ -1,4 +1,6 @@
 /* globals describe, it */
+const path = require('path')
+
 const chai = require('chai')
 const expect = chai.expect
 chai.use(require('chai-as-promised'))
@@ -6,17 +8,17 @@ chai.use(require('chai-as-promised'))
 const dagger = require('../dagger')
 
 describe('dagger.js#require', function () {
-  it('Properly handles the basic project', function (done) {
+  it('Handles the basic project', function (done) {
     const expectedResult = [{
       parent: 'a.js',
       module: 'b.js'
     }]
-    expect(dagger.require('samples/basic/a'))
+    expect(dagger.require('./samples/basic/a'))
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })
 
-  it('Properly handles the cyclic project', function (done) {
+  it('Handles the cyclic project', function (done) {
     const expectedResult = [{
       parent: 'c.js',
       module: 'a.js'
@@ -27,12 +29,12 @@ describe('dagger.js#require', function () {
       parent: 'a.js',
       module: 'b.js'
     }]
-    expect(dagger.require('samples/cyclic/a'))
+    expect(dagger.require('./samples/cyclic/a'))
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })
 
-  it('Properly handles the nested project', function (done) {
+  it('Handles the nested project', function (done) {
     const expectedResult = [{
       parent: 'nested/b.js',
       module: 'c.js'
@@ -40,27 +42,41 @@ describe('dagger.js#require', function () {
       parent: 'a.js',
       module: 'nested/b.js'
     }]
-    expect(dagger.require('samples/nested/a'))
+    expect(dagger.require('./samples/nested/a'))
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })
 
-  it('Properly handles relative `fs.read` calls', function (done) {
+  it('Handles relative `fs.read` calls', function (done) {
     const expectedResult = [{
       parent: 'a.js',
       module: 'nested/b.js'
     }]
-    expect(dagger.require('samples/fs_read/a'))
+    expect(dagger.require('./samples/fs_read/a'))
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })
 
-  it('Properly handles external packages', function (done) {
+  it('Handles external packages', function (done) {
     const expectedResult = [{
       parent: 'a.js',
       module: 'b.js'
     }]
     expect(dagger.require('./samples/third_party/a'))
+    .to.eventually.deep.equal(expectedResult)
+    .notify(done)
+  })
+
+  it('Handles absolute imports', function (done) {
+    const expectedResult = [{
+      parent: 'a.js',
+      module: 'b.js'
+    }, {
+      parent: 'a.js',
+      module: 'c.js'
+    }]
+    const absolutePath = path.resolve('test/samples/absolute/a')
+    expect(dagger.require(absolutePath))
     .to.eventually.deep.equal(expectedResult)
     .notify(done)
   })
