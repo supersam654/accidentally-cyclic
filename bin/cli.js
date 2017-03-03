@@ -62,8 +62,8 @@ function main (args) {
   .then(dependencies => {
     for (let dep of dependencies) {
       // Shorten names even more for graph representation.
-      dep.module = path.basename(dep.module, '.js')
-      dep.parent = path.basename(dep.parent, '.js')
+      dep.module = path.basename(dep.module)
+      dep.parent = path.basename(dep.parent)
       console.log(dep)
     }
 

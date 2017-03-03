@@ -22,11 +22,20 @@ function looksLikeThirdParty (parentRelativePath, moduleRelativePath) {
       parentRelativePath.includes('node_modules')
 }
 
+function isModule (importName) {
+  return !importName.startsWith('.') && !path.isAbsolute(importName)
+}
+
 function hijackLoad (visitor) {
   Module._load = function (request, parent, isMain) {
     const exports = originalLoad.apply(Module, arguments)
     const parentFullPath = parent.filename
-    const moduleFullPath = Module._resolveFilename(request, parent)
+    let moduleFullPath
+    if (isModule(request)) {
+      moduleFullPath = request
+    } else {
+      moduleFullPath = Module._resolveFilename(request, parent)
+    }
     visitor(parentFullPath, moduleFullPath)
     return exports
   }
@@ -63,13 +72,11 @@ exports.require = function (entryPoint, showNodeModules) {
     showNodeModules = true
   }
 
-  let toBePurged = new Set()
   let dependencies = []
   // const basePath = Module._resolveFilename(entryPoint, process.cwd())
   const basePath = path.dirname(path.resolve(getCallerDirectory(), entryPoint))
 
   hijackLoad(function visitor (parentPath, modulePath) {
-    toBePurged.add(modulePath)
     if (!showNodeModules && looksLikeThirdParty(parentPath, modulePath)) {
       return
     }
@@ -91,18 +98,18 @@ exports.require = function (entryPoint, showNodeModules) {
       resolve(dependencies)
     }
 
+    let originalCache
     try {
+      originalCache = require.cache
+      for (let key of Object.keys(require.cache)) {
+        delete require.cache[key]
+      }
       require(entryPoint)
     } finally {
       // Undo the damage no matter what happens.
       Module._load = originalLoad
       process.exit = originalExit
-
-      // Clear files we required from cache to make this method more idempotent.
-      // Then calling `dagger.require('./a')` twice will yield the same result twice.
-      for (let cachedFile of toBePurged) {
-        delete require.cache[cachedFile]
-      }
+      require.cache = originalCache
     }
 
     // Get rid of the last known dependency because that is this file requiring the entry point.
