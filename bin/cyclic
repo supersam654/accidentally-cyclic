@@ -23,18 +23,28 @@ function parseArguments () {
     description: 'Create internal dependency graph of Node.js project.'
   })
 
-  parser.addArgument(
+  const actions = parser.addArgumentGroup({title: 'Output'})
+  actions.setDefaults({text: true})
+  actions.addArgument(
     ['--json'],
     {
       help: 'Output dependencies directly as a JSON array to a file'
     }
   )
-  parser.addArgument(
+  actions.addArgument(
     ['--html'],
     {
-      help: 'Output dependency graph to a self-contained HTML file'
+      help: 'Output the dependency graph to a self-contained HTML file'
     }
   )
+  actions.addArgument(
+    ['--text'],
+    {
+      action: 'storeTrue',
+      help: '[DEFAULT] Output dependencies in a human-readable form.'
+    }
+  )
+
   parser.addArgument(
     ['-a', '--all'],
     {
@@ -69,16 +79,9 @@ function main (args) {
   process.chdir(path.dirname(mainFile))
   cyclic.require(mainFile, args.all)
   .then(dependencies => {
-    for (let dep of dependencies) {
-      // Shorten names even more for graph representation.
-      // dep.module = path.basename(dep.module)
-      // dep.parent = path.basename(dep.parent)
-      console.log(`${dep.parent} -> ${dep.module}`)
-    }
-
     const jsonData = JSON.stringify(dependencies, null, 2)
 
-    // Note that you can export as json and html if you so please.
+    // Note that you can export as multiple formats if you so please.
     if (args.json) {
       fs.writeFileSync(args.json, jsonData)
     }
@@ -87,6 +90,11 @@ function main (args) {
       const frontendJS = fs.readFileSync('./html_template/script.js').toString()
       const htmlData = sprintf(htmlTemplate, jsonData, frontendJS)
       fs.writeFileSync(args.html, htmlData)
+    }
+    if (args.text) {
+      for (let dependency of dependencies) {
+        console.log(`${dependency.parent} -> ${dependency.module}`)
+      }
     }
   })
   .catch(e => {
