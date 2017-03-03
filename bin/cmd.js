@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+'use strict'
+
 const fs = require('fs')
 const path = require('path')
 
@@ -52,7 +54,7 @@ function parseArguments () {
 function main (args) {
   const mainFile = path.resolve(process.cwd(), args.mainFile)
 
-  dagger.spy(mainFile, !args.all, args.quiet)
+  dagger.spy(mainFile, !args.all)
   .then(dependencies => {
     for (let dep of dependencies) {
       // Shorten names even more for graph representation.

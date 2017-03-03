@@ -40,7 +40,27 @@ function hijackLoad (basePath, visitor) {
   }
 }
 
-exports.spy = function (entryPoint, hideNodeModules, supressStdout) {
+function getCallerDirectory () {
+  const originalStackTrace = Error.prepareStackTrace
+  Error.prepareStackTrace = (_, stack) => stack
+  const err = new Error()
+  const stack = err.stack
+  Error.prepareStackTrace = originalStackTrace
+
+  let currentFile = stack.shift().getFileName()
+  let callerFile
+  while (stack.length > 0) {
+    callerFile = stack.shift().getFileName()
+    // When the filename changes, we've made it to the file that called this.
+    if (currentFile !== callerFile) {
+      break
+    }
+  }
+
+  return path.dirname(callerFile)
+}
+
+exports.spy = function (entryPoint, hideNodeModules) {
   let dependencies = []
 
   const basePath = path.dirname(entryPoint)
@@ -63,11 +83,8 @@ exports.spy = function (entryPoint, hideNodeModules, supressStdout) {
     }
 
     try {
-      process.chdir(path.resolve(path.dirname(entryPoint)))
-      require(entryPoint)
-    } catch (e) {
-      console.warn('Something went wrong when requiring the entry point.')
-      console.warn(e)
+      process.chdir(getCallerDirectory())
+      require(path.resolve(entryPoint))
     } finally {
       // Undo the damage no matter what happens.
       Module._load = originalLoad

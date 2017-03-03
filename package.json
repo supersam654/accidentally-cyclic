@@ -6,7 +6,8 @@
   "bin": "./cmd.js",
   "scripts": {
     "lint": "node node_modules/standard/bin/cmd.js",
-    "test": "npm run lint"
+    "mocha": "node node_modules/mocha/bin/mocha",
+    "test": "npm run lint && npm run mocha"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,9 @@
     "argparse": "^1.0.9"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "mocha": "^3.2.0",
     "standard": "^9.0.0"
   },
   "engines": {
