@@ -1,63 +1,49 @@
-/* globals vis, dependencies */
-let labelMaps = {}
-let nodes = []
-let edges = []
-
-for (let dependency of dependencies) {
-  if (labelMaps[dependency.parent] === undefined) {
-    labelMaps[dependency.parent] = nodes.length
-    nodes.push({
-      id: nodes.length,
-      label: dependency.parent
-    })
-  }
-
-  if (labelMaps[dependency.module] === undefined) {
-    labelMaps[dependency.module] = nodes.length
-    nodes.push({
-      id: nodes.length,
-      label: dependency.module
-    })
-  }
-  edges.push({
-    from: labelMaps[dependency.parent],
-    to: labelMaps[dependency.module]
-  })
-}
-
+/* globals cytoscape, dependencies */
 const container = document.getElementById('container')
-const data = {
-  nodes: new vis.DataSet(nodes),
-  edges: new vis.DataSet(edges)
+let nodes = new Set()
+let edges = new Set()
+for (let dependency of dependencies) {
+  nodes.add({data: {
+    id: dependency.module
+  }})
+  nodes.add({data: {
+    id: dependency.parent
+  }})
+  edges.add({data: {
+    id: dependency.parent + dependency.module,
+    source: dependency.parent,
+    target: dependency.module
+  }})
 }
 
-const options = {
+const cy = cytoscape({
+  container: container,
+  elements: {
+    nodes: Array.from(nodes),
+    edges: Array.from(edges)
+  },
   layout: {
-    // hierarchical: {
-    //   enabled: false,
-    //   parentCentralization: true,
-    //   direction: 'UD',
-    //   sortMethod: 'hubsize',
-    //   edgeMinimization: true
-    // }
-    randomSeed: 0
+    name: 'grid',
+    directed: true
   },
-  edges: {
-    arrows: 'to',
-    smooth: false
-  },
-  physics: {
-    enabled: true,
-    hierarchicalRepulsion: {
-      centralGravity: 0.0,
-      springLength: 300,
-      springConstant: 0.01,
-      nodeDistance: 200,
-      damping: 0.09
-    },
-    solver: 'hierarchicalRepulsion'
-  }
-}
-
-const network = new vis.Network(container, data, options)
-network.fit()
+  style: [{
+    selector: 'node',
+    style: {
+      'content': 'data(id)',
+      'text-opacity': 0.8,
+      'text-valign': 'center',
+      'text-halign': 'right',
+      'background-color': '#11479e'
+    }
+  }, {
+    selector: 'edge',
+    style: {
+      'width': 4,
+      'target-arrow-shape': 'triangle',
+      'line-color': '#9dbaea',
+      'target-arrow-color': '#9dbaea',
+      'curve-style': 'bezier'
+    }
+  }]
+})
+console.log(cy)
