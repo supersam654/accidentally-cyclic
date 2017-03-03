@@ -53,8 +53,17 @@ function parseArguments () {
 
 function main (args) {
   let mainFile = args.mainFile
-  if (args.mainFile.startsWith('.')) {
-    mainFile = path.resolve(process.cwd(), mainFile)
+  // Prepend './' to relative paths that don't already have them.
+  // `require` paths need to start with './' if they are relative but system paths do not.
+  try {
+    fs.accessSync(mainFile)
+    // If `accessSync` didn't throw, this is a relative path or an absolute path to a file.
+    if (!path.isAbsolute(mainFile)) {
+      // Make sure relative paths are formatted correctly for `require`
+      mainFile = path.resolve(process.cwd(), mainFile)
+    }
+  } catch (_) {
+    // This must be a core module or third-party module so don't do anything.
   }
   // TODO: Revert chdir change if this ever gets used outside of a CLI.
   process.chdir(path.dirname(mainFile))
