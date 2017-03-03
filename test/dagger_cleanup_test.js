@@ -1,25 +1,21 @@
 /* globals describe, it */
 const Module = require('module')
 
-const chai = require('chai')
-const expect = chai.expect
-chai.use(require('chai-as-promised'))
+const expect = require('chai').expect
 
 const dagger = require('../dagger')
 
-describe('dagger.js', function () {
-  describe('#require', function () {
-    it('Restores `require` after the promise resolves.', function (done) {
-      const originalRequire = require
-      const originalLoad = Module._load
+describe('dagger.js#require', function () {
+  it('Restores `require` after the promise resolves.', function (done) {
+    const originalRequire = require
+    const originalLoad = Module._load
 
-      dagger.require('samples/basic/a')
-      .then(() => {
-        expect(require).to.equal(originalRequire)
-        expect(originalLoad).to.equal(Module._load)
-        done()
-      }).catch(done)
-    })
+    dagger.require('samples/basic/a')
+    .then(() => {
+      expect(require).to.equal(originalRequire)
+      expect(originalLoad).to.equal(Module._load)
+      done()
+    }).catch(done)
   })
 
   it('Restores `process.exit` after the promise resolves.', function (done) {

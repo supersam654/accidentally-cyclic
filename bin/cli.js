@@ -54,7 +54,7 @@ function parseArguments () {
 function main (args) {
   const mainFile = path.resolve(process.cwd(), args.mainFile)
 
-  dagger.spy(mainFile, !args.all)
+  dagger.require(mainFile, !args.all)
   .then(dependencies => {
     for (let dep of dependencies) {
       // Shorten names even more for graph representation.

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A CLI tool for finding cyclic dependencies within an Node.js project.",
   "main": "dagger.js",
-  "bin": "./cmd.js",
+  "bin": "./cli.js",
   "scripts": {
     "lint": "node node_modules/standard/bin/cmd.js",
     "mocha": "node node_modules/mocha/bin/mocha",

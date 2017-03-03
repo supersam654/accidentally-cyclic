@@ -5,17 +5,15 @@ chai.use(require('chai-as-promised'))
 
 const dagger = require('../dagger')
 
-describe('dagger.js', function () {
-  describe('#require', function () {
-    it('Properly handles the basic project', function (done) {
-      const expectedResult = [{
-        parent: 'a.js',
-        module: 'b.js'
-      }]
-      expect(dagger.require('samples/basic/a'))
-      .to.eventually.deep.equal(expectedResult)
-      .notify(done)
-    })
+describe('dagger.js#require', function () {
+  it('Properly handles the basic project', function (done) {
+    const expectedResult = [{
+      parent: 'a.js',
+      module: 'b.js'
+    }]
+    expect(dagger.require('samples/basic/a'))
+    .to.eventually.deep.equal(expectedResult)
+    .notify(done)
   })
 
   it('Properly handles the cyclic project', function (done) {
