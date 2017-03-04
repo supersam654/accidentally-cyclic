@@ -17,7 +17,6 @@ function parseArguments () {
   })
 
   const actions = parser.addArgumentGroup({title: 'Output'})
-  actions.setDefaults({text: true})
   actions.addArgument(
     ['--json'],
     {
@@ -55,6 +54,10 @@ function parseArguments () {
 }
 
 function main (args) {
+  // If no action is specified, output text.
+  if (!args.html && !args.json) {
+    args.text = true
+  }
   let mainFile = args.mainFile
   // Prepend './' to relative paths that don't already have them.
   // `require` paths need to start with './' if they are relative but system paths do not.
