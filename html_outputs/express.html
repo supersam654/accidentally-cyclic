@@ -1,0 +1,67 @@
+<html>
+<head>
+  <style type="text/css">
+    #container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/2.7.15/cytoscape.min.js"></script>
+  <script>
+  const style = [
+    {
+      selector: 'node',
+      style: {
+        'content': 'data(id)',
+        'text-opacity': 0.8,
+        'text-valign': 'center',
+        'text-halign': 'right',
+        'background-color': '#11479e'
+      }
+    }, {
+      selector: 'edge',
+      style: {
+        'width': 1,
+        'target-arrow-shape': 'triangle',
+        'line-color': '#9dbaea',
+        'target-arrow-color': '#9dbaea',
+        'curve-style': 'bezier'
+      }
+    }, {
+      selector: '[cyclic]',
+      style: {
+        'background-color': 'RED'
+      }
+    }
+  ]
+
+  const cy = cytoscape({
+    container: document.getElementById('container'),
+    style: style
+  })
+  cy.json({"elements":{"nodes":[{"data":{"id":"lib/express.js","topo":1},"position":{"x":0,"y":0},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"index.js","topo":0},"position":{"x":0,"y":0},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/application.js","topo":9,"cyclic":true},"position":{"x":0,"y":0},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/router/index.js","topo":6},"position":{"x":0,"y":0},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/router/route.js","topo":8,"cyclic":true},"position":{"x":0,"y":0},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/router/layer.js","topo":7},"position":{"x":0,"y":0},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/middleware/init.js","topo":11},"position":{"x":0,"y":0},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/middleware/query.js","topo":2},"position":{"x":0,"y":0},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/view.js","topo":10,"cyclic":true},"position":{"x":0,"y":0},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/utils.js","topo":4},"position":{"x":0,"y":0},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"ipaddr.js"},"position":{"x":0,"y":0},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"../proxy-addr/index.js"},"position":{"x":0,"y":0},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/request.js","topo":5},"position":{"x":0,"y":0},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/response.js","topo":3},"position":{"x":0,"y":0},"group":"nodes","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""}],"edges":[{"data":{"id":"index.jslib/express.js","source":"index.js","target":"lib/express.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/express.jslib/application.js","source":"lib/express.js","target":"lib/application.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/application.jslib/router/index.js","source":"lib/application.js","target":"lib/router/index.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/router/index.jslib/router/route.js","source":"lib/router/index.js","target":"lib/router/route.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/router/route.jslib/router/layer.js","source":"lib/router/route.js","target":"lib/router/layer.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/router/index.jslib/router/layer.js","source":"lib/router/index.js","target":"lib/router/layer.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/application.jslib/middleware/init.js","source":"lib/application.js","target":"lib/middleware/init.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/application.jslib/middleware/query.js","source":"lib/application.js","target":"lib/middleware/query.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/application.jslib/view.js","source":"lib/application.js","target":"lib/view.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/view.jslib/utils.js","source":"lib/view.js","target":"lib/utils.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"../proxy-addr/index.jsipaddr.js","source":"../proxy-addr/index.js","target":"ipaddr.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/application.jslib/utils.js","source":"lib/application.js","target":"lib/utils.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/express.jslib/router/route.js","source":"lib/express.js","target":"lib/router/route.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/express.jslib/router/index.js","source":"lib/express.js","target":"lib/router/index.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/express.jslib/request.js","source":"lib/express.js","target":"lib/request.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/express.jslib/response.js","source":"lib/express.js","target":"lib/response.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/response.jslib/utils.js","source":"lib/response.js","target":"lib/utils.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""},{"data":{"id":"lib/express.jslib/middleware/query.js","source":"lib/express.js","target":"lib/middleware/query.js"},"position":{},"group":"edges","removed":false,"selected":false,"selectable":true,"locked":false,"grabbable":true,"classes":""}]},"zoomingEnabled":true,"userZoomingEnabled":true,"zoom":1,"minZoom":1e-50,"maxZoom":1e+50,"panningEnabled":true,"userPanningEnabled":true,"pan":{"x":0,"y":0},"boxSelectionEnabled":true,"renderer":{"name":"null"}})
+
+  cy.$('[cyclic]').addClass('cyclic')
+
+  const totalEdges = cy.edges().length
+  const totalNodes = cy.nodes().length
+  let avoidOverlap = true
+  let minNodeSpacing = 0
+  if (totalNodes >= 20) {
+    // avoidOverlap makes every node _way_ too far apart.
+    avoidOverlap = false
+    minNodeSpacing = 100 * Math.log(totalNodes)
+  }
+  cy.layout({
+    name: 'concentric',
+    levelWidth: () => Math.log(totalNodes),
+    avoidOverlap: avoidOverlap,
+    minNodeSpacing: minNodeSpacing
+  })
+  </script>
+</body>
+</html>
