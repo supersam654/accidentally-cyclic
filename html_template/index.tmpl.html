@@ -31,6 +31,11 @@
         'target-arrow-color': '#9dbaea',
         'curve-style': 'bezier'
       }
+    }, {
+      selector: '[cyclic]',
+      style: {
+        'background-color': 'RED'
+      }
     }
   ]
 
@@ -39,6 +44,8 @@
     style: style
   })
   cy.json({0})
+
+  cy.$('[cyclic]').addClass('cyclic')
 
   const totalEdges = cy.edges().length
   cy.layout({
