@@ -49,11 +49,18 @@
 
   const totalEdges = cy.edges().length
   const totalNodes = cy.nodes().length
+  let avoidOverlap = true
+  let minNodeSpacing = 0
+  if (totalNodes >= 20) {
+    // avoidOverlap makes every node _way_ too far apart.
+    avoidOverlap = false
+    minNodeSpacing = 100 * Math.log(totalNodes)
+  }
   cy.layout({
     name: 'concentric',
     levelWidth: () => Math.log(totalNodes),
-    avoidOverlap: false,
-    minNodeSpacing: 100 * Math.log(totalNodes)
+    avoidOverlap: avoidOverlap,
+    minNodeSpacing: minNodeSpacing
   })
   </script>
 </body>
