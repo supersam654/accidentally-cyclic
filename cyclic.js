@@ -127,6 +127,7 @@ exports.require = function (entryPoint, showNodeModules) {
       for (let key of Object.keys(require.cache)) {
         delete require.cache[key]
       }
+      module.paths = Module._nodeModulePaths(process.cwd()).concat(module.paths)
       require(entryPoint)
     } finally {
       // Undo the damage no matter what happens.
