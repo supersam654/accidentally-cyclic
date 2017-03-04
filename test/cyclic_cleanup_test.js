@@ -35,4 +35,20 @@ describe('cyclic.js#require cleanup', function () {
       done()
     }).catch(done)
   })
+
+  it('Gracefully returns when `process.exit` is called.', function (done) {
+    const originalProcessExit = process.exit
+    const expectedDependencies = [{
+      parent: 'a.js',
+      module: 'b.js'
+    }]
+    cyclic.require('./samples/exit/a')
+    .then(dependencies => {
+      // `process.exit` should be still be restored.
+      expect(process.exit).to.equal(originalProcessExit)
+      expect(dependencies).to.deep.equal(expectedDependencies)
+      done()
+    })
+    .catch(done)
+  })
 })
