@@ -14,6 +14,8 @@ To create the dependency graph for a given project, try:
     $ npm install -g accidentally-cyclic
     $ cyclic --html graph.html path/to/project/index
 
+Then open `graph.html` (which will be in the current directory in the above example).
+
 To use AC inside of a project, try:
 
     $ npm install --save accidentally-cyclic
@@ -29,8 +31,6 @@ for (let dependency of dependencies) {
 }
 ```
 
-Then open `graph.html` (which will be in the current directory in the above example).
-
 ## Known Limitations
 
 We currently don't support recording delayed `require`s. For example, if a module is `require`d in a callback or promise, it won't get recorded.
@@ -41,7 +41,3 @@ setTimeout(() => {
   require('./db')
 }, 0)
 ```
-
-## TODO
-
-- [] Add screenshots.
