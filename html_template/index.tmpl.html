@@ -48,11 +48,12 @@
   cy.$('[cyclic]').addClass('cyclic')
 
   const totalEdges = cy.edges().length
+  const totalNodes = cy.nodes().length
   cy.layout({
     name: 'concentric',
-    levelWidth: nodes => Math.log(nodes.length),
+    levelWidth: () => Math.log(totalNodes),
     avoidOverlap: false,
-    minNodeSpacing: 100
+    minNodeSpacing: 100 * Math.log(totalNodes)
   })
   </script>
 </body>
