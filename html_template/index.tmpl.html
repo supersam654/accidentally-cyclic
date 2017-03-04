@@ -11,9 +11,6 @@
 <body>
   <div id="container"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/2.7.15/cytoscape.min.js"></script>
-  <!-- <script src="https://cdn.rawgit.com/tgdwyer/WebCola/v3/WebCola/cola.v3.min.js"></script>
-  <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cola/1.5.0/cytoscape-cola.js"></script> -->
-  <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-spread/1.2.0/cytoscape-spread.js"></script>
   <script>
   const style = [
     {
@@ -28,7 +25,7 @@
     }, {
       selector: 'edge',
       style: {
-        'width': 4,
+        'width': 1,
         'target-arrow-shape': 'triangle',
         'line-color': '#9dbaea',
         'target-arrow-color': '#9dbaea',
@@ -42,10 +39,13 @@
     style: style
   })
   cy.json({0})
+
+  const totalEdges = cy.edges().length
   cy.layout({
-    name: 'spread',
-    minDist: 200,
-    randomize: false
+    name: 'concentric',
+    levelWidth: nodes => Math.log(nodes.length),
+    avoidOverlap: false,
+    minNodeSpacing: 100
   })
   </script>
 </body>
