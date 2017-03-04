@@ -27,10 +27,10 @@ function isModule (importName) {
 
 function hijackLoad (visitor) {
   Module._load = function (request, parent, isMain) {
-    const exports = originalLoad.apply(Module, arguments)
     const parentFullPath = parent.filename
     const moduleFullPath = Module._resolveFilename(request, parent)
     visitor(parentFullPath, moduleFullPath, request)
+    const exports = originalLoad.apply(Module, arguments)
     return exports
   }
 }
@@ -99,7 +99,13 @@ exports.require = function (entryPoint, showNodeModules) {
 
   let dependencies = []
 
+  let firstRequire = true
   hijackLoad(function visitor (parentPath, modulePath, request) {
+    // Skip the first import because that is this file importing the entry point.
+    if (firstRequire) {
+      firstRequire = false
+      return
+    }
     dependencies.push({
       parent: parentPath,
       module: modulePath,
@@ -131,8 +137,6 @@ exports.require = function (entryPoint, showNodeModules) {
 
     dependencies = simplifyNames(entryPoint, dependencies, showNodeModules)
 
-    // Get rid of the last known dependency because that is this file requiring the entry point.
-    dependencies.pop()
     resolve(dependencies)
   })
 }

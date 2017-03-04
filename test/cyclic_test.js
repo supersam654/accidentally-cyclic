@@ -20,14 +20,14 @@ describe('cyclic.js#require', function () {
 
   it('Handles the cyclic project', function (done) {
     const expectedResult = [{
-      parent: 'c.js',
-      module: 'a.js'
+      parent: 'a.js',
+      module: 'b.js'
     }, {
       parent: 'b.js',
       module: 'c.js'
     }, {
-      parent: 'a.js',
-      module: 'b.js'
+      parent: 'c.js',
+      module: 'a.js'
     }]
     expect(cyclic.require('./samples/cyclic/a'))
     .to.eventually.deep.equal(expectedResult)
@@ -36,11 +36,11 @@ describe('cyclic.js#require', function () {
 
   it('Handles the nested project', function (done) {
     const expectedResult = [{
-      parent: 'nested/b.js',
-      module: 'c.js'
-    }, {
       parent: 'a.js',
       module: 'nested/b.js'
+    }, {
+      parent: 'nested/b.js',
+      module: 'c.js'
     }]
     expect(cyclic.require('./samples/nested/a'))
     .to.eventually.deep.equal(expectedResult)
